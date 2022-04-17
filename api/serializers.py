@@ -3,8 +3,10 @@ from .models import Vacancy
 
 
 class VacancySerializer(serializers.ModelSerializer):
-    company = serializers.RelatedField(source='company', read_only=True)
+    company = serializers.PrimaryKeyRelatedField(
+        read_only=True,
+    )
 
     class Meta:
         model = Vacancy
-        fields = ['id', 'name', 'salary', 'company']
+        fields = ('id', 'name', 'description', 'salary', 'company')

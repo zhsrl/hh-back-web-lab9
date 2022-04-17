@@ -1,10 +1,12 @@
-from django.shortcuts import render
+
 from django.views import View
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 
 from django.core.serializers import serialize
 
+
 from .serializers import VacancySerializer
+
 from .models import Company, Vacancy
 
 
@@ -14,7 +16,7 @@ class CompanyView(View):
         all_companies = Company.objects.all()
         companies_count = Company.objects.count()
 
-        companies_serialized = VacancySerializer
+        companies_serialized = serialize('python', all_companies)
 
         companies = {
             'companies': companies_serialized,
@@ -35,10 +37,11 @@ class VacancyView(View):
         all_vacancy = Vacancy.objects.all()
         vacany_count = Vacancy.objects.count()
 
-        vacancies_serialized = serialize('python', all_vacancy)
+        serialized_data = VacancySerializer(
+            all_vacancy, many=True).data
 
         vacancies = {
-            'vacancies': vacancies_serialized,
+            'vacancies': serialized_data,
             'count': vacany_count
         }
 
